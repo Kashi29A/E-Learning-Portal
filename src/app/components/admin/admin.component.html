@@ -1,0 +1,135 @@
+<head>
+
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>E-Learning Portal</title>
+
+</head>
+
+<div style="margin-top: 50px!important;" class="container">
+    <div class="row row-content align-items-center">
+        <div class="col-12 col-lg-12 col-md-12">
+            <h4 class="text-align">Hello Admin <span class="badge badge-warning blink_me"> Welcome </span>
+            </h4>
+        </div>
+        <div class="col-12 col-lg-3 col-md-6 cardContainer">
+            <div class="card shadow p-10 mb-1 bg-white rounded" style="width: 15rem;">
+
+                <div class="card-body">
+                    <h5 style="color: black;" class="card-title">Create new competition</h5>
+                    <p style="color: black;" class="card-text" id="demo"></p>
+                    <a onClick="document.getElementById('competitionContainer').scrollIntoView();"
+                        class="btn btn-primary">Create</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="align-items: center; 
+    background:rgb(122, 120, 120);  " class="card">
+        <p-tabView>
+            <p-tabPanel header="Question set creation">
+                <div id="competitionContainer" style="height: 550px;" class="row row-content align-items-center">
+
+                    <div class="col-12 col-lg-12 col-md-12 d-flex justify-content-center">
+                        <img src="assets/img/qstnppr1.png" height="50px" alt="qstnppr">
+                        <h4 style="margin-left: 10px;">Question Form </h4>
+                    </div>
+                    <!-- <div class="col-12 col-lg-12 col-md-12 cardContainer">
+                        <input style="width: 100%; text-align: center;" class="form-control" type="text" placeholder="Untitled Form"
+                            name="formTitle" id="formTitle">
+                    </div> -->
+                    <div id="questionAnswer" class="col-12 col-lg-12 col-md-12 cardContainer">
+                        <div style="display: inline-block; padding-top: 10px;"
+                            class="col-12 col-lg-8 col-md-8 cardContainer">
+                            <input style="width: 100%;" class="form-control" type="text" name="question"
+                                id="questionField" placeholder="Question">
+                        </div>
+                        <div style="display: inline-block; padding-top: 10px;"
+                            class="col-12 col-lg-4 col-md-4 cardContainer form-group">
+                            <select name="dropdown" class="form-control" id="dropdown"
+                                (change)="dropdownChanged($event)">
+                                <option value="mcq" selected>Multiple Choice</option>
+                                <option value="para">Short Paragraph</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedOption == 'para'" style="display: inline-block; "
+                        class="col-12 col-lg-12 col-md-12 cardContainer">
+                        <div style="display: inline-block; " class="col-12 col-lg-12 col-md-12  cardContainer">
+                            <input style="width: 100%;" class="form-control" placeholder="Answer text" type="text"
+                                name="" id="" readonly>
+                        </div>
+                        <div style="margin-top: 10px; " class="col-12">
+                            <button class="btn btn-primary" (click)="addQuestion()">Add Question</button>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedOption == 'mcq'" style="display: inline-block; "
+                        class="col-12 col-lg-12 col-md-12 cardContainer">
+                        <div style="display: inline-block; margin-top: 10px;"
+                            class="col-12 col-lg-12 col-md-12  cardContainer">
+                            <input placeholder="Correct Answer" class="form-control" type="text" name="correctAnswer"
+                                id="correctAnswer"
+                                [(ngModel)]="question.correctAnswer" #correctAnswer="ngModel" required minlength="4">
+                            
+                        </div>
+                       
+                        <div style="display: inline-block; margin-top: 10px;"
+                            class="col-12 col-lg-12 col-md-12  cardContainer">
+                            <input placeholder="Option 1" class="form-control" type="text" name="option1" id="option1">
+                        </div>
+                        <div style="margin-top: 10px; " class="col-12 col-lg-12 col-md-12  cardContainer">
+                            <input placeholder="Option 2" class="form-control" type="text" name="option2" id="option2">
+                        </div>
+                        <div style="margin-top: 10px; " class="col-12 col-lg-12 col-md-12  cardContainer">
+                            <input placeholder="Option 3" class="form-control" type="text" name="option3" id="option3">
+                        </div>
+                        <div style="margin-top: 10px; " class="col-12 col-lg-12 col-md-12  cardContainer">
+                            <input placeholder="Option 4" class="form-control" type="text" name="option4" id="option4">
+                        </div>
+                        <div style="margin-top: 10px;" *ngIf="correctAnswer.invalid && (correctAnswer.dirty || correctAnswer.touched)" class="alert alert-danger">
+
+                            <div *ngIf="correctAnswer.errors.required">
+                                Answer field is required.
+                            </div>
+                            <div *ngIf="correctAnswer.errors.minlength">
+                                Answer field must be at least 4 characters long.
+                            </div>
+
+                        </div>
+                        <div style="margin-top: 10px; " class="col-12">
+                            <button [disabled]="correctAnswer.invalid" class="btn btn-primary" (click)="addQuestion()">Add Question</button>
+                        </div>
+                    </div>
+
+                </div>
+            </p-tabPanel>
+            <p-tabPanel [disabled]="false" header="Preview Question Paper">
+                <form #questionForm="ngForm" (ngSubmit)="onSubmit(questionForm.value)">
+                    <!-- <div class="d-flex justify-content-center">
+                        <h1>{{formTitle}}</h1>
+                    </div> -->
+                    <div class="form-group" *ngFor="let q of questions">
+                        <label for="email">{{q.question}}</label>&nbsp; <button type="button" class="btn btn-danger"
+                            (click)="deleteQuestion(q)">Delete</button> <br>
+                        <input *ngIf="q.type == 'para'" type="text" class="form-control" id="answer" placeholder="write your answer here" >
+                        <br>
+                        <input *ngIf="q.type == 'mcq'" type="radio" id="option1" name="option1" value="option1"> &nbsp;
+                        <label *ngIf="q.type == 'mcq'" for="option1">{{q.option1}}</label><br>
+                        <input *ngIf="q.type == 'mcq'" type="radio" id="option2" ngModel name="option2" value="option2">
+                        &nbsp;
+                        <label *ngIf="q.type == 'mcq'" for="option2">{{q.option2}}</label><br>
+                        <input *ngIf="q.type == 'mcq'" type="radio" id="option3" name="option3" value="option3"> &nbsp;
+                        <label *ngIf="q.type == 'mcq'" for="option3">{{q.option3}}</label><br>
+                        <input *ngIf="q.type == 'mcq'" type="radio" id="option4" name="option4" value="option4"> &nbsp;
+                        <label *ngIf="q.type == 'mcq'" for="option4">{{q.option4}}</label><br>
+
+                    </div>
+
+                    <button *ngIf="questions.length > 0" class="btn btn-primary">Publish</button>
+                </form>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
